@@ -30,7 +30,7 @@ export const ButtonReset = styled(ButtonDefault)`
             background-image: linear-gradient(#ffffff, #d5d5d5);
         }
     }
-    color: #555;
+    color: red;
 `;
 
 export const ButtonSubmit = styled(ButtonDefault)`
@@ -82,7 +82,21 @@ export const Input = styled.input`
 `;
 
 export const InputCheckBox = styled(Input)`
-margin-top: 7px;
+    margin-top: 7px;
+`;
+
+export const Td = styled.td`
+    padding: 0 50px;
+`;
+
+export const TdTeam = styled(Td)`
+    padding: 0 100px;
+`;
+
+export const Heading = styled(Title)`
+    text-align: left;
+    font-size: 1.2em;
+    color: green;
 `;
 
 export default styled.div`
