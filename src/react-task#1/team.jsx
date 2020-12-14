@@ -57,8 +57,9 @@ export default function NewTeam(props) {
                         </Td>
                         <Td>
                             <Field
-                                name={`${name}.goals`}
+                                name={`${name}.total_goals`}
                                 validate={minGoals || required}
+                                onChange={()=>props.handleChange(props.push, props.pop)}
                             >
                                 {({ input, meta }) => (
                                     <div>

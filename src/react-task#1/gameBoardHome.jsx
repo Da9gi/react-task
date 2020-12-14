@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Form } from "react-final-form";
-import arrayMutators from "final-form-arrays";
+import arrayMutators, { push } from "final-form-arrays";
 import Style, {
     ButtonSubmit,
     ShowValues,
@@ -13,9 +13,6 @@ import NewTeam from "./team";
 import { TableHead, TableBody } from "./showScore";
 
 export default function GameBoard() {
-    const [scoreOne, setScoreOne] = useState([]);
-    const [scoreTwo, setScoreTwo] = useState([]);
-
     const delay = (duration) =>
         new Promise((resolve) => {
             setTimeout(resolve, duration);
@@ -23,19 +20,19 @@ export default function GameBoard() {
 
     const onSubmit = async (values) => {
         await delay(300);
-        values.teamOne ? setScoreOne(values.teamOne) : setScoreOne([]);
-        values.teamTwo ? setScoreTwo(values.teamTwo) : setScoreTwo([]);
         alert(JSON.stringify(values, 0, 2));
     };
 
-    const handleChange = () => {};
+    const handleChange = (push, pop) => {
+        push("goals", {minute:0})
+    }
 
     return (
         <Style>
             <Form
                 onSubmit={onSubmit}
                 mutators={{ ...arrayMutators }}
-                // initialValues={{ Goals: 0 }}
+                initialValues={{ teamOne: [], teamTwo: [] }}
                 render={({
                     handleSubmit,
                     values,
@@ -54,16 +51,21 @@ export default function GameBoard() {
                                 <TdTeam>
                                     <ButtonDefault
                                         type="button"
-                                        onClick={() =>
-                                            push("teamOne", undefined)
-                                        }
+                                        onClick={() => {
+                                            push("teamOne", {
+                                                fullname: "",
+                                                t_shirt: null,
+                                                total_goals: 0,
+                                                goals: new Array(this.total_goals).fill(0),
+                                            });
+                                        }}
                                     >
                                         Add Player
                                     </ButtonDefault>
                                 </TdTeam>
                             </tr>
                             <hr />
-                            <NewTeam name="teamOne" />
+                            <NewTeam name="teamOne" push={push} handleChange={handleChange} pop={pop}/>
                         </ShowValues>
                         <ShowValues>
                             <tr>
@@ -73,16 +75,20 @@ export default function GameBoard() {
                                 <TdTeam>
                                     <ButtonDefault
                                         type="button"
-                                        onClick={() =>
-                                            push("teamTwo", undefined)
-                                        }
+                                        onClick={() => {
+                                            push("teamTwo", {
+                                                fullname: "",
+                                                t_shirt: null,
+                                                goals: 0,
+                                            });
+                                        }}
                                     >
                                         Add Player
                                     </ButtonDefault>
                                 </TdTeam>
                             </tr>
                             <hr />
-                            <NewTeam name="teamTwo" />
+                            <NewTeam name="teamTwo" push={push} handleChange={handleChange} pop={pop}/>
                         </ShowValues>
                         <ButtonSubmit
                             type="submit"
@@ -99,11 +105,11 @@ export default function GameBoard() {
                                     TEAM 1
                                     <table>
                                         <TableHead />
-                                        {scoreOne.length && (
+
+                                        {values.teamOne.length && (
                                             <TableBody
-                                                score={scoreOne}
-                                                team="team1"
-                                                push={push}
+                                                score={values.teamOne}
+                                                name="goals"
                                             />
                                         )}
                                     </table>
@@ -112,11 +118,11 @@ export default function GameBoard() {
                                     TEAM 2
                                     <table>
                                         <TableHead />
-                                        {scoreTwo.length && (
+
+                                        {values.teamTwo.length && (
                                             <TableBody
-                                                score={scoreTwo}
-                                                team="team2"
-                                                push={push}
+                                                score={values.teamTwo}
+                                                name="goals"
                                             />
                                         )}
                                     </table>
@@ -129,3 +135,5 @@ export default function GameBoard() {
         </Style>
     );
 }
+
+// {time:[{ minute: 0 }]}

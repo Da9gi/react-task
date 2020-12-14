@@ -14,43 +14,37 @@ export function TableHead() {
     );
 }
 
-const ReturnScore = ({ fullname, goal, team }) => {
-    if (goal) {
-        return (
-            <>
-                <FieldArray name={team}>
-                    {({ fields }) =>
-                        fields.map((name, index) => (
-                            <tbody key={index}>
-                                {" "}
-                                <Td>{fullname}</Td>
-                                <Td>{goal}</Td>
-                                <Td>
-                                    <Field
-                                        name={`${name}.time`}
-                                        component="input"
-                                        type="number"
-                                        min="1"
-                                        max="30"
-                                    />
-                                </Td>
-                            </tbody>
-                        ))
-                    }
-                </FieldArray>
-                <ReturnScore goal={goal - 1} />
-            </>
-        );
-    } else return null;
-};
-
-export function TableBody({ score, team, push }) {
-    push(team, undefined);
+export function TableBody({ score, name }) {
     return (
-        <>
-            {score.map(({ fullname, goals }) => (
-                <ReturnScore fullname={fullname} goal={goals} team={team} />
-            ))}
-        </>
+        <React.Fragment>
+            {score.reduce((acc, { fullname, goals }) => {
+                const arr = new Array(parseInt(goals)).fill(0);
+                return acc.concat(
+                    arr.map(() => (
+                        <tbody>
+                            <FieldArray name={name}>
+                                {({ fields }) =>
+                                    fields.map((name, index) => (
+                                        <React.Fragment key={index}>
+                                            <Td>{fullname}</Td>
+                                            <Td>1</Td>
+                                            <Td>
+                                                <Field
+                                                    name={`${name}.minute`}
+                                                    component="input"
+                                                    type="number"
+                                                    min="1"
+                                                    max="30"
+                                                />
+                                            </Td>
+                                        </React.Fragment>
+                                    ))
+                                }
+                            </FieldArray>
+                        </tbody>
+                    ))
+                );
+            }, [])}
+        </React.Fragment>
     );
 }
