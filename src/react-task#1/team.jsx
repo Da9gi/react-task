@@ -1,24 +1,17 @@
 import { FieldArray } from "react-final-form-arrays";
-import Style, {
-    ButtonSubmit,
-    ShowValues,
-    Input,
-    Td,
-    Heading,
-    ButtonDefault,
-    ButtonReset,
-} from "./Styles";
-import { Form, Field } from "react-final-form";
+import { Input, Td, ButtonReset } from "./Styles";
+import { Field } from "react-final-form";
 
 export default function NewTeam(props) {
     const required = (value) => (value ? undefined : "*");
     const minGoals = (value) => (value > 0 ? undefined : "! Invalid");
+    const { setGoals } = props;
 
     return (
         <FieldArray name={props.name}>
             {({ fields }) =>
                 fields.map((name, index) => (
-                    <tr key="name">
+                    <tr key={name}>
                         <label>Player #{index + 1}</label>
                         <Td>
                             <Field
@@ -59,7 +52,13 @@ export default function NewTeam(props) {
                             <Field
                                 name={`${name}.total_goals`}
                                 validate={minGoals || required}
-                                onChange={()=>props.handleChange(props.push, props.pop)}
+                                onChange={(e) => {
+                                    props.name[index].goals = new Array(
+                                        name.total_goals
+                                    ).fill(0);
+                                    console.log(props.name[index].goals);
+                                    setGoals(index, e.target.value, props.name);
+                                }}
                             >
                                 {({ input, meta }) => (
                                     <div>

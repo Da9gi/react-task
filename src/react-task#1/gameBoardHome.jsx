@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { Form } from "react-final-form";
-import arrayMutators, { push } from "final-form-arrays";
+import arrayMutators from "final-form-arrays";
 import Style, {
     ButtonSubmit,
     ShowValues,
@@ -23,22 +23,44 @@ export default function GameBoard() {
         alert(JSON.stringify(values, 0, 2));
     };
 
-    const handleChange = (push, pop) => {
-        push("goals", {minute:0})
-    }
+    const setGoals = (args, state, tools) => {
+        const index = args[0];
+        const value = args[1];
+        const team = args[2];
+        tools.changeValue(
+            state,
+            `${team[index]}.goals`,
+            (goals) => {
+                const value1 = JSON.parse(JSON.stringify(goals));
+                const diff = value - value1.length;
+                if (diff < 0) {
+                    value1.splice(
+                        value1.length - Math.abs(diff) - 1,
+                        Math.abs(diff)
+                    );
+                } else {
+                    new Array(diff)
+                        .fill(0)
+                        .forEach(() => value1.push({ minute: null }));
+                }
+                return value1;
+            }
+        );
+        
+    };
 
     return (
         <Style>
             <Form
                 onSubmit={onSubmit}
-                mutators={{ ...arrayMutators }}
+                mutators={{ ...arrayMutators, setGoals }}
                 initialValues={{ teamOne: [], teamTwo: [] }}
                 render={({
                     handleSubmit,
                     values,
                     submitting,
                     form: {
-                        mutators: { push, pop },
+                        mutators: { push, pop, setGoals },
                     },
                     pristine,
                 }) => (
@@ -56,7 +78,7 @@ export default function GameBoard() {
                                                 fullname: "",
                                                 t_shirt: null,
                                                 total_goals: 0,
-                                                goals: new Array(this.total_goals).fill(0),
+                                                goals: [],
                                             });
                                         }}
                                     >
@@ -65,7 +87,7 @@ export default function GameBoard() {
                                 </TdTeam>
                             </tr>
                             <hr />
-                            <NewTeam name="teamOne" push={push} handleChange={handleChange} pop={pop}/>
+                            <NewTeam name="teamOne" setGoals={setGoals} />
                         </ShowValues>
                         <ShowValues>
                             <tr>
@@ -79,7 +101,8 @@ export default function GameBoard() {
                                             push("teamTwo", {
                                                 fullname: "",
                                                 t_shirt: null,
-                                                goals: 0,
+                                                total_goals: 0,
+                                                goals: [],
                                             });
                                         }}
                                     >
@@ -88,7 +111,7 @@ export default function GameBoard() {
                                 </TdTeam>
                             </tr>
                             <hr />
-                            <NewTeam name="teamTwo" push={push} handleChange={handleChange} pop={pop}/>
+                            <NewTeam name="teamTwo" setGoals={setGoals} />
                         </ShowValues>
                         <ButtonSubmit
                             type="submit"
@@ -105,26 +128,26 @@ export default function GameBoard() {
                                     TEAM 1
                                     <table>
                                         <TableHead />
-
-                                        {values.teamOne.length && (
-                                            <TableBody
-                                                score={values.teamOne}
-                                                name="goals"
-                                            />
-                                        )}
+                                        <tbody>
+                                            {values.teamOne.length && (
+                                                <TableBody
+                                                    score={values.teamOne}
+                                                />
+                                            )}
+                                        </tbody>
                                     </table>
                                 </Td>
                                 <Td>
                                     TEAM 2
                                     <table>
                                         <TableHead />
-
-                                        {values.teamTwo.length && (
-                                            <TableBody
-                                                score={values.teamTwo}
-                                                name="goals"
-                                            />
-                                        )}
+                                        <tbody>
+                                            {values.teamTwo.length && (
+                                                <TableBody
+                                                    score={values.teamTwo}
+                                                />
+                                            )}
+                                        </tbody>
                                     </table>
                                 </Td>
                             </tr>
@@ -135,5 +158,3 @@ export default function GameBoard() {
         </Style>
     );
 }
-
-// {time:[{ minute: 0 }]}
