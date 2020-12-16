@@ -1,6 +1,7 @@
 import { FieldArray } from "react-final-form-arrays";
 import { Input, Td, ButtonReset } from "./Styles";
 import { Field } from "react-final-form";
+import { setStorage } from "../utilities/utility";
 
 export default function NewTeam(props) {
     const required = (value) => (value ? undefined : "*");
@@ -52,13 +53,9 @@ export default function NewTeam(props) {
                             <Field
                                 name={`${name}.total_goals`}
                                 validate={minGoals || required}
-                                onChange={(e) => {
-                                    props.name[index].goals = new Array(
-                                        name.total_goals
-                                    ).fill(0);
-                                    console.log(props.name[index].goals);
-                                    setGoals(index, e.target.value, props.name);
-                                }}
+                                onChange={(e) =>
+                                    setGoals(index, e.target.value, props.name)
+                                }
                             >
                                 {({ input, meta }) => (
                                     <div>
@@ -79,7 +76,10 @@ export default function NewTeam(props) {
                         <Td>
                             <ButtonReset
                                 type="button"
-                                onClick={() => fields.remove(index)}
+                                onClick={() => {
+                                    fields.remove(index);
+                                    //setStorage("score", props.values);
+                                }}
                             >
                                 X
                             </ButtonReset>

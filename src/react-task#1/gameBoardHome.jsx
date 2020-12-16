@@ -8,45 +8,48 @@ import Style, {
     Td,
     Heading,
     ButtonDefault,
+    ButtonReset,
 } from "./Styles";
 import NewTeam from "./team";
 import { TableHead, TableBody } from "./showScore";
+import withLocalStorage from "../utilities/withStorage";
+import { parse, stringify } from "../utilities/utility";
 
-export default function GameBoard() {
+function GameBoard({ load, save, remove }) {
     const delay = (duration) =>
         new Promise((resolve) => {
             setTimeout(resolve, duration);
         });
 
-    const onSubmit = async (values) => {
-        await delay(300);
-        alert(JSON.stringify(values, 0, 2));
+    const loadScore = () => {
+        const score = load("score");
+        if (!score) {
+            return { teamOne: [], teamTwo: [] };
+        } else return score;
     };
 
-    const setGoals = (args, state, tools) => {
-        const index = args[0];
-        const value = args[1];
-        const team = args[2];
-        tools.changeValue(
-            state,
-            `${team[index]}.goals`,
-            (goals) => {
-                const value1 = JSON.parse(JSON.stringify(goals));
-                const diff = value - value1.length;
-                if (diff < 0) {
-                    value1.splice(
-                        value1.length - Math.abs(diff) - 1,
-                        Math.abs(diff)
-                    );
-                } else {
-                    new Array(diff)
-                        .fill(0)
-                        .forEach(() => value1.push({ minute: null }));
-                }
-                return value1;
+    const onSubmit = async (values) => {
+        await delay(300);
+        save("score", values);
+        alert(stringify(load("score"), 0, 2));
+    };
+
+    const setGoals = ([index, value, team], state, tools) => {
+        tools.changeValue(state, `${team[index].goals}`, (goals) => {
+            const value1 = parse(stringify(goals));
+            const diff = value - value1.length;
+            if (diff < 0) {
+                value1.splice(
+                    value1.length - Math.abs(diff) - 1,
+                    Math.abs(diff)
+                );
+            } else {
+                new Array(diff)
+                    .fill(0)
+                    .forEach(() => value1.push({ minute: null }));
             }
-        );
-        
+            return value1;
+        });
     };
 
     return (
@@ -54,17 +57,18 @@ export default function GameBoard() {
             <Form
                 onSubmit={onSubmit}
                 mutators={{ ...arrayMutators, setGoals }}
-                initialValues={{ teamOne: [], teamTwo: [] }}
+                initialValues={loadScore()}
                 render={({
                     handleSubmit,
                     values,
                     submitting,
+                    form,
                     form: {
                         mutators: { push, pop, setGoals },
                     },
                     pristine,
                 }) => (
-                    <>
+                    <React.Fragment>
                         <ShowValues>
                             <tr>
                                 <TdTeam>
@@ -87,7 +91,11 @@ export default function GameBoard() {
                                 </TdTeam>
                             </tr>
                             <hr />
-                            <NewTeam name="teamOne" setGoals={setGoals} />
+                            <NewTeam
+                                name="teamOne"
+                                values={values}
+                                setGoals={setGoals}
+                            />
                         </ShowValues>
                         <ShowValues>
                             <tr>
@@ -111,7 +119,11 @@ export default function GameBoard() {
                                 </TdTeam>
                             </tr>
                             <hr />
-                            <NewTeam name="teamTwo" setGoals={setGoals} />
+                            <NewTeam
+                                name="teamTwo"
+                                values={values}
+                                setGoals={setGoals}
+                            />
                         </ShowValues>
                         <ButtonSubmit
                             type="submit"
@@ -120,6 +132,16 @@ export default function GameBoard() {
                         >
                             Submit Record
                         </ButtonSubmit>
+                        <ButtonReset
+                            type="reset"
+                            onClick={() => {
+                                form.reset();
+                                remove("score");
+                            }}
+                            disabled={submitting}
+                        >
+                            Reset
+                        </ButtonReset>
                         <ShowValues>
                             <Heading>Summary:-</Heading>
                             <hr />
@@ -132,6 +154,7 @@ export default function GameBoard() {
                                             {values.teamOne.length && (
                                                 <TableBody
                                                     score={values.teamOne}
+                                                    name="teamOne"
                                                 />
                                             )}
                                         </tbody>
@@ -145,6 +168,7 @@ export default function GameBoard() {
                                             {values.teamTwo.length && (
                                                 <TableBody
                                                     score={values.teamTwo}
+                                                    name="teamTwo"
                                                 />
                                             )}
                                         </tbody>
@@ -152,9 +176,13 @@ export default function GameBoard() {
                                 </Td>
                             </tr>
                         </ShowValues>
-                    </>
+                    </React.Fragment>
                 )}
             />
         </Style>
     );
 }
+
+const Enhanced = withLocalStorage(GameBoard);
+
+export default Enhanced;
