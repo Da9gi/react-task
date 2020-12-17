@@ -1,7 +1,6 @@
 import { FieldArray } from "react-final-form-arrays";
 import { Input, Td, ButtonReset } from "./Styles";
 import { Field } from "react-final-form";
-import { setStorage } from "../utilities/utility";
 
 export default function NewTeam(props) {
     const required = (value) => (value ? undefined : "*");
@@ -78,7 +77,6 @@ export default function NewTeam(props) {
                                 type="button"
                                 onClick={() => {
                                     fields.remove(index);
-                                    //setStorage("score", props.values);
                                 }}
                             >
                                 X

@@ -52,19 +52,26 @@ function GameBoard({ load, save, remove }) {
         });
     };
 
+    const setInitialValue = ([values], state, { changeValue }) => {
+        changeValue(state, values, (value) => {
+            remove("score");
+            value = loadScore();
+            return value;
+        });
+    };
+
     return (
         <Style>
             <Form
                 onSubmit={onSubmit}
-                mutators={{ ...arrayMutators, setGoals }}
+                mutators={{ ...arrayMutators, setGoals, setInitialValue }}
                 initialValues={loadScore()}
                 render={({
                     handleSubmit,
                     values,
                     submitting,
-                    form,
                     form: {
-                        mutators: { push, pop, setGoals },
+                        mutators: { push, pop, setGoals, setInitialValue },
                     },
                     pristine,
                 }) => (
@@ -134,10 +141,7 @@ function GameBoard({ load, save, remove }) {
                         </ButtonSubmit>
                         <ButtonReset
                             type="reset"
-                            onClick={() => {
-                                form.reset();
-                                remove("score");
-                            }}
+                            onClick={setInitialValue}
                             disabled={submitting}
                         >
                             Reset
