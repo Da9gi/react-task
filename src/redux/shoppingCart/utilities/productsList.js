@@ -1,6 +1,6 @@
-import withStorage from "./withStorage";
+import { getStorage, setStorage } from "./utility";
 
-export const productsList = [
+const productsList = [
   { id: 101, title: "Item#1", price: 10, isInStock: true },
   { id: 102, title: "Item#2", price: 107, isInStock: true },
   { id: 103, title: "Item#3", price: 100, isInStock: true },
@@ -13,18 +13,21 @@ export const productsList = [
   { id: 110, title: "Item#10", price: 91, isInStock: true },
 ];
 
-function Products({ load, save }) {
+function products() {
   const loadProducts = () => {
-    const allProducts = load("products");
+    const allProducts = getStorage("products");
     return allProducts
       ? allProducts
-      : () => {
-          save("products", productsList);
-          return load("products");
-        };
+      : (function () {
+          setStorage("products", productsList);
+          return getStorage("products");
+        })();
   };
-  return loadProducts();
+  return loadProducts;
 }
 
-const enhancer = withStorage(Products);
-export default enhancer;
+const getData = (products) => products();
+
+const loadProducts = getData(products);
+
+export default loadProducts;

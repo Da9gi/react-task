@@ -1,4 +1,4 @@
-import loadProducts, { productsList } from "../utilities/productsList";
+import loadProducts from "../utilities/productsList";
 
 export const INCREASE_QUANTITY = "quantity/increment";
 export const DECREASE_QUANTITY = "quantity/decrement";
@@ -9,7 +9,7 @@ export const UPDATE_CART = "cart/update";
 export const DELETE_CART = "cart/delete";
 
 export function fetchProducts() {
-  return (dispatch) => dispatch(GetAllProduct(productsList));
+  return (dispatch) => dispatch(GetAllProduct(loadProducts()));
 }
 
 export function GetAllProduct(payload) {
