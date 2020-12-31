@@ -1,11 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import Products from "./components/product";
 import Carts from "./components/cart";
 import { Td, Title } from "./styles/Styles";
+import { GetCartCount } from "./actions";
 
-export default function ShoppingCart() {
+function ShoppingCart({ products, GetCartCount }) {
+  const { cartCount } = products;
+  useEffect(() => {
+    GetCartCount();
+  }, [cartCount, GetCartCount]);
+
   return (
     <Router>
       <table>
@@ -29,6 +36,7 @@ export default function ShoppingCart() {
               <Link to="/components/cart">
                 <Title color="white" size="1em">
                   Carts
+                  {` | ${cartCount} |`}
                 </Title>
               </Link>
             </Td>
@@ -48,3 +56,17 @@ export default function ShoppingCart() {
     </Router>
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    products: state.products,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    GetCartCount: () => dispatch(GetCartCount()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ShoppingCart);

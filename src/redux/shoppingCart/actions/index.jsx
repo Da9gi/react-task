@@ -1,11 +1,11 @@
 import loadProducts from "../utilities/productsList";
 
-export const INCREASE_QUANTITY = "quantity/increment";
-export const DECREASE_QUANTITY = "quantity/decrement";
-export const GET_ALL_PRODUCT = "product/get";
-export const GET_CART_COUNT = "cart/getcount";
-export const ADD_CART = "cart/add";
-export const UPDATE_CART = "cart/update";
+export const INCREASE_QUANTITY = "product/increment";
+export const DECREASE_QUANTITY = "product/decrement";
+export const GET_ALL_PRODUCT = "products/get";
+export const GET_CART_COUNT = "carts/getcount";
+export const ADD_CART = "carts/add";
+export const UPDATE_CART = "carts/update";
 export const DELETE_CART = "cart/delete";
 
 export function fetchProducts() {
@@ -14,45 +14,45 @@ export function fetchProducts() {
 
 export function GetAllProduct(payload) {
   return {
-    type: "product/get",
+    type: GET_ALL_PRODUCT,
     payload,
   };
 }
 
 export function AddCart(payload) {
   return {
-    type: "cart/add",
+    type: ADD_CART,
     payload,
   };
 }
 export function UpdateCart(payload) {
   return {
-    type: "cart/update",
+    type: UPDATE_CART,
     payload,
   };
 }
 export function DeleteCart(payload) {
   return {
-    type: "cart/delete",
+    type: DELETE_CART,
     payload,
   };
 }
 
 export function IncreaseQuantity(payload) {
   return {
-    type: "quantity/increment",
+    type: INCREASE_QUANTITY,
     payload,
   };
 }
 export function DecreaseQuantity(payload) {
   return {
-    type: "quantity/decrement",
+    type: DECREASE_QUANTITY,
     payload,
   };
 }
 
 export function GetCartCount() {
   return {
-    type: "cart/getcount",
+    type: GET_CART_COUNT,
   };
 }
