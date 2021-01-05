@@ -5,11 +5,11 @@ import { AddCart, fetchProducts } from "../actions";
 import { Grid, Show, ButtonSubmit, Title } from "../styles/Styles";
 
 function ProductsList(props) {
-  const { products } = props.product;
-  const { fetchProducts, AddCart } = props;
+  const { products } = props.state;
+  const { AddCart, fetchProducts } = props;
   useEffect(() => {
-    fetchProducts();
-  }, [fetchProducts]);
+    fetchProducts(products);
+  }, [products, fetchProducts]);
 
   if (products.length > 0) {
     return (
@@ -34,15 +34,16 @@ function ProductsList(props) {
 }
 
 const mapStateToProps = (state) => {
+  console.log("Products:", state.rootReducer.productReducer);
   return {
-    product: state.products,
+    state: state.rootReducer.productReducer,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchProducts: () => dispatch(fetchProducts()),
     AddCart: (product) => dispatch(AddCart(product)),
+    fetchProducts: (payload) => dispatch(fetchProducts(payload)),
   };
 };
 

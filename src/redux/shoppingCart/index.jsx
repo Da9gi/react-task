@@ -4,14 +4,16 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import Products from "./components/product";
 import Carts from "./components/cart";
+import AddProduct from "./components/addproduct";
 import { Td, Title } from "./styles/Styles";
 import { GetCartCount } from "./actions";
 
-function ShoppingCart({ products, GetCartCount }) {
-  const { cartCount } = products;
+function ShoppingCart({ state, GetCartCount }) {
+  const { cartCount } = state;
+
   useEffect(() => {
     GetCartCount();
-  }, [cartCount, GetCartCount]);
+  }, [GetCartCount]);
 
   return (
     <Router>
@@ -40,6 +42,13 @@ function ShoppingCart({ products, GetCartCount }) {
                 </Title>
               </Link>
             </Td>
+            <Td>
+              <Link to="/components/addproduct">
+                <Title color="white" size="1em">
+                  Add Product
+                </Title>
+              </Link>
+            </Td>
           </tr>
         </thead>
       </table>
@@ -51,6 +60,9 @@ function ShoppingCart({ products, GetCartCount }) {
           <Route path="/components/cart">
             <Carts />
           </Route>
+          <Route path="/components/addproduct">
+            <AddProduct />
+          </Route>
         </Switch>
       </div>
     </Router>
@@ -59,7 +71,7 @@ function ShoppingCart({ products, GetCartCount }) {
 
 const mapStateToProps = (state) => {
   return {
-    products: state.products,
+    state: state.rootReducer.cartReducer,
   };
 };
 

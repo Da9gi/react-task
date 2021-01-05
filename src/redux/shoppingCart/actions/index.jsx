@@ -1,15 +1,23 @@
 import loadProducts from "../utilities/productsList";
 
+let flag = true;
+
 export const INCREASE_QUANTITY = "product/increment";
 export const DECREASE_QUANTITY = "product/decrement";
 export const GET_ALL_PRODUCT = "products/get";
+export const ADD_PRODUCT = "products/add";
 export const GET_CART_COUNT = "carts/getcount";
 export const ADD_CART = "carts/add";
-export const UPDATE_CART = "carts/update";
-export const DELETE_CART = "cart/delete";
+export const DELETE_CART = "carts/remove";
 
-export function fetchProducts() {
-  return (dispatch) => dispatch(GetAllProduct(loadProducts()));
+export function fetchProducts(products) {
+  return (dispatch) => {
+    if (flag) {
+      flag = false;
+      return dispatch(GetAllProduct(loadProducts()));
+    }
+    return GetAllProduct(products);
+  };
 }
 
 export function GetAllProduct(payload) {
@@ -25,9 +33,9 @@ export function AddCart(payload) {
     payload,
   };
 }
-export function UpdateCart(payload) {
+export function AddProduct(payload) {
   return {
-    type: UPDATE_CART,
+    type: ADD_PRODUCT,
     payload,
   };
 }

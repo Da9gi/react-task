@@ -14,8 +14,8 @@ import {
   Heading,
 } from "../styles/Styles";
 
-function Cart({ products, IncreaseQuantity, DecreaseQuantity, DeleteCart }) {
-  const { Carts } = products;
+function Cart({ state, IncreaseQuantity, DecreaseQuantity, DeleteCart }) {
+  const { Carts } = state;
   let ListCart = [];
   let TotalCart = 0;
   Object.keys(Carts).forEach((index) => {
@@ -86,8 +86,9 @@ function Cart({ products, IncreaseQuantity, DecreaseQuantity, DeleteCart }) {
 }
 
 const mapStateToProps = (state) => {
+  console.log("Carts: ", state.rootReducer.cartReducer);
   return {
-    products: state.products,
+    state: state.rootReducer.cartReducer,
   };
 };
 
