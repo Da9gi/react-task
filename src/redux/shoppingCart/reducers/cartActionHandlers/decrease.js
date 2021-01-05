@@ -11,7 +11,7 @@ export default function caseDecreaseQuantity(state, action) {
   }
   return {
     ...state,
-    cartCount: state.cartCount - 1,
     Carts: [...Carts],
+    cartCount: Carts.reduce((acc, item) => acc + item.quantity, 0),
   };
 }

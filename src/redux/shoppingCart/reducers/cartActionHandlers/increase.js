@@ -6,7 +6,7 @@ export default function caseIncreaseQuantity(state, action) {
   };
   return {
     ...state,
-    cartCount: state.cartCount + 1,
     Carts: [...tempCarts],
+    cartCount: tempCarts.reduce((acc, item) => acc + item.quantity, 0),
   };
 }

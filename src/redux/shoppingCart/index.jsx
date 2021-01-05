@@ -71,7 +71,7 @@ function ShoppingCart({ state, GetCartCount }) {
 
 const mapStateToProps = (state) => {
   return {
-    state: state.rootReducer.cartReducer,
+    state: state.shoppingCart.cart,
   };
 };
 

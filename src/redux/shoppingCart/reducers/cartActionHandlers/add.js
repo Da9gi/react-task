@@ -3,13 +3,11 @@ export default function caseAddCart(state, action) {
     const cart = {
       id: action.payload.id,
       quantity: 1,
-      title: action.payload.title,
-      price: action.payload.price,
     };
     return {
       ...state,
-      cartCount: state.cartCount + 1,
       Carts: [...state.Carts, cart],
+      cartCount: state.Carts.reduce((acc, item) => acc + item.quantity, 1),
     };
   } else {
     let check = false;
@@ -25,19 +23,18 @@ export default function caseAddCart(state, action) {
       const cart = {
         id: action.payload.id,
         quantity: 1,
-        title: action.payload.title,
-        price: action.payload.price,
       };
+      const temp = [...state.Carts, cart];
       return {
         ...state,
-        cartCount: state.cartCount + 1,
-        Carts: [...state.Carts, cart],
+        Carts: [...temp],
+        cartCount: temp.reduce((acc, item) => acc + item.quantity, 0),
       };
     }
     return {
       ...state,
-      cartCount: state.cartCount + 1,
       Carts: [...tempCarts],
+      cartCount: tempCarts.reduce((acc, item) => acc + item.quantity, 0),
     };
   }
 }

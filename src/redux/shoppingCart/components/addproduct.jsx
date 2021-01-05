@@ -72,9 +72,8 @@ function AddProducts({ state, AddProduct, fetchProducts }) {
 }
 
 const mapStateToProps = (state) => {
-  console.log("Add:", state.rootReducer.productReducer);
   return {
-    state: state.rootReducer.productReducer,
+    state: state.shoppingCart.product,
   };
 };
 

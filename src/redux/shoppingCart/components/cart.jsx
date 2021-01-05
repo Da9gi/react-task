@@ -15,12 +15,14 @@ import {
 } from "../styles/Styles";
 
 function Cart({ state, IncreaseQuantity, DecreaseQuantity, DeleteCart }) {
-  const { Carts } = state;
-  let ListCart = [];
+  const { Carts } = state.cart;
+  const { products } = state.product;
+  const Dict = {};
+  products.map((product, index) => (Dict[product.id] = { ...product }));
   let TotalCart = 0;
   Object.keys(Carts).forEach((index) => {
-    TotalCart += Number(Carts[index].quantity) * Number(Carts[index].price);
-    ListCart.push(Carts[index]);
+    TotalCart +=
+      Number(Carts[index].quantity) * Number(Dict[Carts[index].id].price);
   });
   const TotalPrice = (price, quantity) => {
     return Number(price * quantity);
@@ -38,11 +40,11 @@ function Cart({ state, IncreaseQuantity, DecreaseQuantity, DeleteCart }) {
         </tr>
       </thead>
       <tbody>
-        {ListCart.map((item, key) => {
+        {Carts.map((item, key) => {
           return (
             <tr key={key}>
-              <Td>{item.title}</Td>
-              <Td>{item.price} $</Td>
+              <Td>{Dict[item.id].title}</Td>
+              <Td>{Dict[item.id].price} $</Td>
               <Td>
                 <ButtonSubmit
                   type="button"
@@ -60,7 +62,7 @@ function Cart({ state, IncreaseQuantity, DecreaseQuantity, DeleteCart }) {
                   +
                 </ButtonSubmit>
               </Td>
-              <Td>{TotalPrice(item.price, item.quantity)} $</Td>
+              <Td>{TotalPrice(Dict[item.id].price, item.quantity)} $</Td>
               <Td>
                 <ButtonReset
                   type="reset"
@@ -86,9 +88,8 @@ function Cart({ state, IncreaseQuantity, DecreaseQuantity, DeleteCart }) {
 }
 
 const mapStateToProps = (state) => {
-  console.log("Carts: ", state.rootReducer.cartReducer);
   return {
-    state: state.rootReducer.cartReducer,
+    state: state.shoppingCart,
   };
 };
 

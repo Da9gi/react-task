@@ -21,7 +21,7 @@ function ProductsList(props) {
             <ButtonSubmit
               type="submit"
               style={{ cursor: "pointer" }}
-              onClick={() => AddCart(product)}
+              onClick={() => AddCart({ id: product.id })}
             >
               Add to Cart
             </ButtonSubmit>
@@ -34,9 +34,8 @@ function ProductsList(props) {
 }
 
 const mapStateToProps = (state) => {
-  console.log("Products:", state.rootReducer.productReducer);
   return {
-    state: state.rootReducer.productReducer,
+    state: state.shoppingCart.product,
   };
 };
 
