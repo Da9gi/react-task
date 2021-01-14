@@ -17,10 +17,10 @@ export function TableHead() {
 
 export function TableBody({ score, name }) {
   return score.reduce((acc, { fullname, total_goals }, currIndex) => {
-    const arr = new Array(total_goals ? parseInt(total_goals) : 0).fill(0);
+    const arr = new Array(parseInt(total_goals)).fill(0);
     return acc.concat(
       arr.map((val, index) => (
-        <tr key={index}>
+        <tr >
           <Td>{fullname}</Td>
           <Td>1</Td>
           <Td>

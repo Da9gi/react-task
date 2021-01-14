@@ -61,7 +61,7 @@ export const Grid = styled.div`
 
 export const Show = styled.div`
   margin: 50px;
-  padding: 30px;
+  padding: 50px;
   background-color: Thistle;
   color: black;
   border: solid red 2px;

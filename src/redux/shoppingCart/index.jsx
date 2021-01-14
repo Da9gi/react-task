@@ -71,7 +71,7 @@ function ShoppingCart({ state, GetCartCount }) {
 
 const mapStateToProps = (state) => {
   return {
-    state: state.shoppingCart.cart,
+    state: state.cart,
   };
 };
 

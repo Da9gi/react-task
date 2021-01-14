@@ -89,7 +89,7 @@ function Cart({ state, IncreaseQuantity, DecreaseQuantity, DeleteCart }) {
 
 const mapStateToProps = (state) => {
   return {
-    state: state.shoppingCart,
+    state: state,
   };
 };
 

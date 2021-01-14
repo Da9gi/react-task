@@ -1,5 +1,5 @@
 import { LOAD_SCORE, REMOVE_SCORE, SAVE_SCORE } from "../actions/index";
-import caseUpdate from "./reducerHandler";
+import { caseUpdate, assignTeam } from "./reducerHandler";
 
 const initialState = {
   teamOne: [],
@@ -21,10 +21,10 @@ export default function boardReducer(state = initialState, action) {
         teamTwo: [],
       };
     case SAVE_SCORE:
-      let teamOne = [...action.payload.teamOne];
-      let teamTwo = [...action.payload.teamTwo];
-      teamOne = caseUpdate(teamOne);
-      teamTwo = caseUpdate(teamTwo);
+      let teamOne = [...assignTeam(action.payload.teamOne)];
+      let teamTwo = [...assignTeam(action.payload.teamTwo)];
+      if (teamOne.length) teamOne = caseUpdate(teamOne);
+      if (teamTwo.length) teamTwo = caseUpdate(teamTwo);
       return {
         ...state,
         teamOne: [...teamOne],

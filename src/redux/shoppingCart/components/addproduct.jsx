@@ -3,13 +3,14 @@ import { Form, Field } from "react-final-form";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 
-import { AddProduct, fetchProducts } from "../actions/index";
+import { AddProduct, fetchedProducts } from "../actions/index";
 import { ButtonSubmit } from "../styles/Styles";
+import { renderPerPage } from "./product";
 
 function AddProducts({ state, AddProduct, fetchProducts }) {
   const { products } = state;
   useEffect(() => {
-    fetchProducts(products);
+    if (!products.length) fetchProducts({ page: 1, perPage: renderPerPage });
   }, [products, fetchProducts]);
   const history = useHistory();
 
@@ -29,7 +30,7 @@ function AddProducts({ state, AddProduct, fetchProducts }) {
     history.push("/components/product");
   };
 
-  const id = products.length ? products.length + 101 : 111;
+  const id = products.length ? products.length + 1 : 1;
 
   const required = (value) => (value ? undefined : "*");
 
@@ -73,14 +74,14 @@ function AddProducts({ state, AddProduct, fetchProducts }) {
 
 const mapStateToProps = (state) => {
   return {
-    state: state.shoppingCart.product,
+    state: state.product,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     AddProduct: (product) => dispatch(AddProduct(product)),
-    fetchProducts: (payload) => dispatch(fetchProducts(payload)),
+    fetchProducts: (payload) => dispatch(fetchedProducts(payload)),
   };
 };
 
