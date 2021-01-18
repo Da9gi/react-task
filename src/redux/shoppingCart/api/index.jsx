@@ -14,8 +14,8 @@ export default function API() {
       .catch(console.error);
     return products;
   };
-  const fetchProductsLimited = async (path, page, perPage) => {
-    await axios(`${path}`, {
+  const fetchProductsLimited = async ({ page, perPage }) => {
+    await axios("/products/fetch", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       data: {

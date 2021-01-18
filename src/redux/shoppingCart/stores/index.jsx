@@ -1,5 +1,5 @@
-// import {configureStore  } from "@reduxjs/toolkit";
-import { applyMiddleware, createStore } from "redux";
+// import {  } from "@reduxjs/toolkit";
+import { applyMiddleware, createStore, compose } from "redux";
 import createSagaMiddleware from "redux-saga";
 import { sagaWatcher } from "../sagas";
 import shoppingCart from "../reducers/index";
@@ -10,8 +10,14 @@ import shoppingCart from "../reducers/index";
 //   },
 // });
 // export default Store;
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const sagaMiddleware = createSagaMiddleware();
-const Store = createStore(shoppingCart, applyMiddleware(sagaMiddleware));
+const middleware = [sagaMiddleware];
+const Store = createStore(
+  shoppingCart,
+  composeEnhancers(applyMiddleware(...middleware))
+);
 sagaMiddleware.run(sagaWatcher);
 
 export default Store;
